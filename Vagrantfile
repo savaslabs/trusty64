@@ -17,7 +17,7 @@ Vagrant.configure(2) do |config|
     vb.customize ["modifyvm", :id, "--memory", 2048]
   end
 
-  project = 'hptn'
+  project = 'default'
 
   config.vm.synced_folder ".", "/var/www/#{project}.dev", :nfs => true
   config.vm.hostname = "#{project}.dev"
