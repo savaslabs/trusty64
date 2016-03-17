@@ -83,7 +83,7 @@ SCRIPT
   # Installing current NodeJS PPA
   $script = <<SCRIPT
 echo Installing NodeJS PPA...
-curl -sL https://deb.nodesource.com/setup | sudo bash -
+curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
 echo Installing NodeJS...
 sudo apt-get -y install build-essential nodejs xvfb
 SCRIPT
@@ -93,7 +93,7 @@ SCRIPT
   $script = <<SCRIPT
 echo Installing Selenium Standalone and dependencies...
 sudo apt-get install -y graphicsmagick openjdk-7-jre-headless firefox fontconfig fonts-liberation fonts-dejavu ttf-dejavu fonts-roboto
-sudo npm install phantomjs -g
+sudo npm install phantomjs-prebuilt -g
 sudo npm install selenium-standalone@latest -g
 SCRIPT
   config.vm.provision "shell", inline: $script
