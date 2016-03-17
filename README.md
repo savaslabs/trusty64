@@ -1,4 +1,5 @@
-===SavasLabs Trusty64 Base box
+==SavasLabs Trusty64 Base box==
+
 To build a new base box:
 
 * clone this repository
