@@ -123,6 +123,16 @@ php -r "unlink('composer-setup.php');"
 sudo mv composer.phar /usr/local/bin/composer
 SCRIPT
   config.vm.provision "shell", inline: $script
+  
+  #Installing Drupal Console...
+  $script = <<SCRIPT
+curl https://drupalconsole.com/installer -L -o drupal.phar
+sudo mv drupal.phar /usr/local/bin/drupal
+sudo chmod +x /usr/local/bin/drupal
+sudo drupal init --override
+drupal init --override
+SCRIPT
+  config.vm.provision "shell", inline: $script
 
   #Installing Drupal via Composer Template for Drupal Projects
   $script = <<SCRIPT
