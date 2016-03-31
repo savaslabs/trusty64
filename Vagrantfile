@@ -31,6 +31,7 @@ Vagrant.configure(2) do |config|
 mkdir -p /var/www/#{project}.dev/www/web
 echo Updating package repositories on local vm....
 sudo add-apt-repository ppa:ondrej/php
+sudo apt-get install software-properties-common
 sudo apt-get -y update
 sudo apt-get -y upgrade
 echo Installing vim and git....
@@ -44,7 +45,8 @@ echo Installing php5.6, apache2 and MySQL...
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password root'
 sudo apt-get -y install mysql-server-5.5
-sudo apt-get -y install php7.0 php-pear php7.0-curl php7.0-gd php7.0-mysql php7.0-xml php7.0-json php7.0-sybase php7.0-cli mysql-common mysql-client-5.5
+## sudo apt-get -y install php7.0 php7.0-curl php7.0-gd php7.0-mysql php7.0-xml php7.0-json php7.0-sybase php7.0-cli 
+sudo apt-get -y install mysql-common mysql-client-5.5
 sudo cp /var/www/#{project}.dev/sysfiles/my.cnf /etc/mysql/my.cnf
 sudo service mysql restart
 SCRIPT
@@ -122,7 +124,7 @@ php composer-setup.php
 php -r "unlink('composer-setup.php');"
 sudo mv composer.phar /usr/local/bin/composer
 SCRIPT
-  config.vm.provision "shell", inline: $script
+#  config.vm.provision "shell", inline: $script
   
   #Installing Drupal Console...
   $script = <<SCRIPT
@@ -132,7 +134,7 @@ sudo chmod +x /usr/local/bin/drupal
 sudo drupal init --override
 drupal init --override
 SCRIPT
-  config.vm.provision "shell", inline: $script
+#  config.vm.provision "shell", inline: $script
 
   #Installing Drupal via Composer Template for Drupal Projects
   $script = <<SCRIPT

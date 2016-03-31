@@ -1,5 +1,6 @@
-# SavasLabs Trusty64 Base box
+# SavasLabs Trusty64 Base box with PHP7.0 -- currently broken!
 
+Note:  There is a problem with the package repository that houses PHP7.0, there are missing configuration files, and as a result Apache, the apache php libraries and php-cli does not install.  This is here for future work in the event that these issues get resolved, we can use this to build an Ubuntu Trusty box with PHP7.0
 To build a new base box:
 
 * clone this repository
