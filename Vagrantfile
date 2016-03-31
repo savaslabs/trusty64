@@ -31,6 +31,7 @@ Vagrant.configure(2) do |config|
 mkdir -p /var/www/#{project}.dev/www/web
 echo Updating package repositories on local vm....
 sudo add-apt-repository ppa:ondrej/php5-5.6
+sudo add-apt-repository ppa:ondrej/php
 sudo apt-get -y update
 sudo apt-get -y upgrade
 echo Installing vim and git....
@@ -95,6 +96,7 @@ echo Installing Selenium Standalone and dependencies...
 sudo apt-get install -y graphicsmagick openjdk-7-jre-headless firefox fontconfig fonts-liberation fonts-dejavu ttf-dejavu fonts-roboto
 sudo npm install phantomjs-prebuilt -g
 sudo npm install selenium-standalone@latest -g
+sudo npm install --global gulp-cli
 SCRIPT
   config.vm.provision "shell", inline: $script
   # Configuring Apache...
@@ -131,6 +133,15 @@ sudo mv drupal.phar /usr/local/bin/drupal
 sudo chmod +x /usr/local/bin/drupal
 sudo drupal init --override
 drupal init --override
+SCRIPT
+  config.vm.provision "shell", inline: $script
+
+  #Making box as small as possible after provisioning
+  $script = <<SCRIPT
+sudo apt-get clean
+sudo dd if=/dev/zero of=/EMPTY bs=1M
+sudo rm -f /EMPTY
+cat /dev/null > ~/.bash_history && history -c && exit
 SCRIPT
   config.vm.provision "shell", inline: $script
 
