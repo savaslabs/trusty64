@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
 mkdir -p /var/www/#{project}.dev/www/web
 echo Updating package repositories on local vm....
 sudo add-apt-repository ppa:ondrej/php5-5.6
-sudo add-apt-repository ppa:ondrej/php
+#sudo add-apt-repository ppa:ondrej/php
 sudo apt-get -y update
 sudo apt-get -y upgrade
 echo Installing vim and git....
