@@ -26,11 +26,11 @@ Vagrant.configure(2) do |config|
   config.ssh.forward_agent  = true
   config.vm.network :private_network, ip: "192.168.88.96"
   
-  # Adding a package repo for php 5.6 and installing vim and git
+  # Adding a package repo for php 7 and installing vim and git
   $script = <<SCRIPT
 mkdir -p /var/www/#{project}.dev/www/web
 echo Updating package repositories on local vm....
-sudo add-apt-repository ppa:ondrej/php5-5.6
+sudo add-apt-repository ppa:ondrej/php
 sudo apt-get -y update
 sudo apt-get -y upgrade
 echo Installing vim and git....
@@ -44,7 +44,7 @@ echo Installing php5.6, apache2 and MySQL...
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password password root'
 sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password root'
 sudo apt-get -y install mysql-server-5.5
-sudo apt-get -y install php5 php-pear php-apc php5-curl php5-gd php5-mysql php5-xdebug mysql-common mysql-client-5.5
+sudo apt-get -y install php7.0 php-pear php7.0-curl php7.0-gd php7.0-mysql php7.0-xml php7.0-json php7.0-sybase php7.0-cli mysql-common mysql-client-5.5
 sudo cp /var/www/#{project}.dev/sysfiles/my.cnf /etc/mysql/my.cnf
 sudo service mysql restart
 SCRIPT
