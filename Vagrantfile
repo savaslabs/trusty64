@@ -16,8 +16,9 @@ Vagrant.configure(2) do |config|
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--memory", 2048]
   end
-  config.vm.provider :parallels do |parallels|
-    config.vm.box = "parallels/ubuntu-14.04"
+
+  config.vm.provider "parallels" do |parallels, override|
+    override.vm.box = "parallels/ubuntu-14.04"
   end
 
   project = 'default'
