@@ -130,6 +130,7 @@ sudo a2ensite mass_virtual.conf
 sudo service apache2 restart
 SCRIPT
   config.vm.provision "shell", inline: $script
+
   # Installing Composer
 $script = <<SCRIPT
 echo Installing Composer...
