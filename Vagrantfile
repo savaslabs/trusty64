@@ -28,7 +28,18 @@ Vagrant.configure(2) do |config|
   config.ssh.insert_key = false
   config.ssh.forward_agent  = true
   config.vm.network :private_network, ip: "192.168.88.96"
-  
+
+  # Extra configuration for parallels.
+  $script = <<SCRIPT
+echo Installing software-properties-common
+sudo apt-get install -y software-properties-common
+echo Installing curl
+sudo apt-get install -y curl
+SCRIPT
+  if ENV['VAGRANT_DEFAULT_PROVIDER'] == 'parallels'
+    config.vm.provision "shell", inline: $script
+  end
+
   # Adding a package repo for php 5.6 and installing vim and git
   $script = <<SCRIPT
 mkdir -p /var/www/#{project}.dev/www/web
@@ -102,6 +113,7 @@ sudo npm install selenium-standalone@latest -g
 sudo npm install --global gulp-cli
 SCRIPT
   config.vm.provision "shell", inline: $script
+
   # Configuring Apache...
   $script = <<SCRIPT
 echo Configuring Apache...
