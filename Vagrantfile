@@ -155,8 +155,6 @@ SCRIPT
   #Making box as small as possible after provisioning
   $script = <<SCRIPT
 sudo apt-get clean
-sudo dd if=/dev/zero of=/EMPTY bs=1M
-sudo rm -f /EMPTY
 cat /dev/null > ~/.bash_history && history -c && exit
 SCRIPT
   config.vm.provision "shell", inline: $script
