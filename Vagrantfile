@@ -17,6 +17,10 @@ Vagrant.configure(2) do |config|
     vb.customize ["modifyvm", :id, "--memory", 2048]
   end
 
+  config.vm.provider :parallels do |parallels, override|
+    override.vm.box = "parallels/ubuntu-14.04"
+  end
+
   project = 'default'
 
   config.vm.synced_folder ".", "/var/www/#{project}.dev", :nfs => true
@@ -25,7 +29,18 @@ Vagrant.configure(2) do |config|
   config.ssh.insert_key = false
   config.ssh.forward_agent  = true
   config.vm.network :private_network, ip: "192.168.88.96"
-  
+
+  # Extra configuration for parallels.
+  $script = <<SCRIPT
+echo Installing software-properties-common
+sudo apt-get install -y software-properties-common
+echo Installing curl
+sudo apt-get install -y curl
+SCRIPT
+  if ENV['VAGRANT_DEFAULT_PROVIDER'] == 'parallels'
+    config.vm.provision "shell", inline: $script
+  end
+
   # Adding a package repo for php 5.6 and installing vim and git
   $script = <<SCRIPT
 mkdir -p /var/www/#{project}.dev/www/web
@@ -99,6 +114,7 @@ sudo npm install selenium-standalone@latest -g
 sudo npm install --global gulp-cli
 SCRIPT
   config.vm.provision "shell", inline: $script
+
   # Configuring Apache...
   $script = <<SCRIPT
 echo Configuring Apache...
@@ -115,6 +131,7 @@ sudo a2ensite mass_virtual.conf
 sudo service apache2 restart
 SCRIPT
   config.vm.provision "shell", inline: $script
+
   # Installing Composer
 $script = <<SCRIPT
 echo Installing Composer...
@@ -136,11 +153,18 @@ drupal init --override
 SCRIPT
   config.vm.provision "shell", inline: $script
 
+  # Make diskspace easy to compress -- for non-parallels machines.
+  $script = <<SCRIPT
+-sudo dd if=/dev/zero of=/EMPTY bs=1M
+-sudo rm -f /EMPTY
+SCRIPT
+  if ENV['VAGRANT_DEFAULT_PROVIDER'] != 'parallels'
+    config.vm.provision "shell", inline: $script
+  end
+
   #Making box as small as possible after provisioning
   $script = <<SCRIPT
 sudo apt-get clean
-sudo dd if=/dev/zero of=/EMPTY bs=1M
-sudo rm -f /EMPTY
 cat /dev/null > ~/.bash_history && history -c && exit
 SCRIPT
   config.vm.provision "shell", inline: $script
