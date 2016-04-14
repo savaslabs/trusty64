@@ -153,6 +153,15 @@ drupal init --override
 SCRIPT
   config.vm.provision "shell", inline: $script
 
+  # Make diskspace easy to compress -- for non-parallels machines.
+  $script = <<SCRIPT
+-sudo dd if=/dev/zero of=/EMPTY bs=1M
+-sudo rm -f /EMPTY
+SCRIPT
+  if ENV['VAGRANT_DEFAULT_PROVIDER'] != 'parallels'
+    config.vm.provision "shell", inline: $script
+  end
+
   #Making box as small as possible after provisioning
   $script = <<SCRIPT
 sudo apt-get clean
