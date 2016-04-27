@@ -62,7 +62,9 @@ sudo debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_aga
 sudo apt-get -y install mysql-server-5.5
 sudo apt-get -y install php5 php-pear php-apc php5-curl php5-gd php5-mysql php5-xdebug mysql-common mysql-client-5.5
 sudo cp /var/www/#{project}.dev/sysfiles/my.cnf /etc/mysql/my.cnf
+sudo cp /var/www/#{project}.dev/sysfiles/xdebug.ini /etc/php5/mods-available/xdebug.ini
 sudo service mysql restart
+sudo service apache2 restart
 SCRIPT
   config.vm.provision "shell", inline: $script
 
