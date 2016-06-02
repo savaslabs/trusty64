@@ -117,10 +117,25 @@ sudo npm install --global gulp-cli
 SCRIPT
   config.vm.provision "shell", inline: $script
 
+  # Configure Varnish
+  $script = <<SCRIPT
+echo Configuring Varnish...
+sudo apt-get install apt-transport-https -y
+sudo curl https://repo.varnish-cache.org/ubuntu/GPG-key.txt | sudo apt-key add -
+sudo echo "deb https://repo.varnish-cache.org/ubuntu/ trusty varnish-4.0" >> /etc/apt/sources.list.d/varnish-cache.list
+sudo apt-get update
+sudo apt-get install varnish
+sudo cp /var/www/#{project}.dev/sysfiles/etc-default-varnish /etc/default/varnish
+sudo cp /var/www/#{project].dev/sysfiles/default.vcl /etc/varnish/default.vcl
+sudo service varnish restart
+SCRIPT
+  config.vm.provision "shell", inline: $script
+
   # Configuring Apache...
   $script = <<SCRIPT
 echo Configuring Apache...
 sudo cp /var/www/#{project}.dev/sysfiles/mass_virtual.conf /etc/apache2/sites-available/mass_virtual.conf
+sudo cp /var/www/#{project}.dev/sysfiles/ports.conf /etc/apache2/ports.conf
 sudo a2enmod authz_groupfile
 sudo a2enmod cgi
 sudo a2enmod headers
